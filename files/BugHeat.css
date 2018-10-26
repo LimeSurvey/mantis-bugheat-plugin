@@ -1,0 +1,22 @@
+.BugHeat--description-row {
+    background-color: #EEE;
+    border-bottom: 1px solid #CCC;
+}
+
+.BugHeat--description-column {
+    padding-top: 1.0rem;
+    padding-bottom: 1.0rem;
+    padding-left: 26px;
+}
+
+.BugHeat--badge-column {
+    padding-top: 0.1rem;
+    padding-bottom: 0.1rem;
+    padding-right: 1.6rem;
+    text-align: right
+}
+
+#BugHeat--badge {
+    padding: 1.1rem 1.8rem 0.9rem 1.8rem;
+    border-radius: 0.3rem;
+}
