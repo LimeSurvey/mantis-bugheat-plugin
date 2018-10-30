@@ -267,7 +267,7 @@ class BugHeatPlugin extends MantisPlugin
             $oRelationShips=relationship_get_all_dest($iBugID);
             $oMonitorCount=
             $oBugNotes = bugnote_get_all_bugnotes($iBugID);
-            $aAffectedUsers = $this->getAffectedUsers($iBugID, force);
+            $aAffectedUsers = $this->getAffectedUsers($iBugID, true);
             
             plugin_push_current('BugHeat');
             $iAffectedMultiplier = plugin_config_get('affected_user_heat');
@@ -285,6 +285,8 @@ class BugHeatPlugin extends MantisPlugin
             
             $iCountFollowing = count(bug_get_monitors($iBugID));
             $iCountDuplicates = 0;
+            $iCountPrivate = 0;
+            $iCountSecurity = 0;
 
             array_walk($oRelationShips, function ($oRelation) use (&$iCountDuplicates, &$aReporterIDs, &$iCountFollowing) {
                 if ($oRelationShip->type==0) {
