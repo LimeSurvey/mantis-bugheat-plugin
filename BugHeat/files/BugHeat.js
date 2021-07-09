@@ -10,9 +10,9 @@ var BugHeatJs = function() {
     },
     addAffect = function($item){
         $.ajax({ 
-            url: "http://mantis.localhost/api/rest/bugheat/addaffect", 
+            url: config['short_path']+"api/rest/bugheat/addaffect", 
             method: 'POST', 
-            data: { 'bugid': 14132 },
+            data: { 'bugid': parseInt($('td.bug-id').html()) },
             success: function(resolve){
                 if(resolve.success) {
                     $('#BugHeat--affectMessage').text(resolve.newString);
@@ -31,9 +31,9 @@ var BugHeatJs = function() {
     },
     removeAffect = function($item){
         $.ajax({ 
-            url: "http://mantis.localhost/api/rest/bugheat/removeaffect", 
+            url: config['short_path']+"api/rest/bugheat/removeaffect", 
             method: 'POST', 
-            data: { 'bugid': 14132 },
+            data: { 'bugid': parseInt($('td.bug-id').html()) },
             success: function(resolve){
                 if(resolve.success) {
                     $('#BugHeat--affectMessage').text(resolve.newString);
