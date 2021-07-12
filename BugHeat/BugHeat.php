@@ -132,11 +132,10 @@ class BugHeatPlugin extends MantisPlugin
     public function updateBugHeat($sEventName, $iBugID)
     {
         $oCustomFields = custom_field_get_all_linked_fields($iBugID);
-        if (!isset($oCustomFields["Bug heat"])) {
-            return;
+        if (isset($oCustomFields["Bug heat"])) {
+            $iFieldID = custom_field_get_id_from_name('Bug heat');
+            custom_field_set_value($iFieldID, $iBugID, $this->calculateBugHeat($iBugID), false);
         }
-        $iFieldID = custom_field_get_id_from_name('Bug heat');
-        custom_field_set_value($iFieldID, $iBugID, $this->calculateBugHeat($iBugID), false);
         return $iBugID;
     }
 
@@ -197,7 +196,7 @@ class BugHeatPlugin extends MantisPlugin
         $dbtable = plugin_table("affected_users", 'BugHeat');
         $dbquery = "INSERT INTO {$dbtable} VALUES(" . db_param() . "," . db_param() . ", 1)";
         db_query($dbquery, [$iBugId, $iUserID]);
-
+        plugin_push_current('BugHeat');
         return [
             "success" => true,
             "newHeat" => $this->calculateBugHeat($iBugId),
@@ -219,6 +218,7 @@ class BugHeatPlugin extends MantisPlugin
         $dbquery = "DELETE FROM {$dbtable} WHERE bugid=" . db_param() . " AND userid=" . db_param();
         $iUserID = auth_get_current_user_id();
         db_query($dbquery, [$iBugID, $iUserID]);
+        plugin_push_current('BugHeat');
 
         return [
             "success" => true,
@@ -272,8 +272,6 @@ class BugHeatPlugin extends MantisPlugin
             $oRelationShips = relationship_get_all_dest($iBugID);
             $oBugNotes = bugnote_get_all_bugnotes($iBugID);
             $aAffectedUsers = $this->getAffectedUsers($iBugID, true);
-
-            plugin_push_current('BugHeat');
             $iAffectedMultiplier = plugin_config_get('affected_user_heat');
             $iDuplicationMultiplier = plugin_config_get('duplicate_heat');
             $iFollowingMultiplier = plugin_config_get('monitor_heat');
