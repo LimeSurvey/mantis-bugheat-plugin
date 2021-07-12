@@ -18,7 +18,7 @@ class BugHeatPlugin extends MantisPlugin
         $this->description = 'Provides a bug heat index which gives you an idea how important a bug is to your users';
         $this->page = "config_page";
 
-        $this->version = '0.0.2';
+        $this->version = '1.0.0';
         $this->requires = array(
             "MantisCore" => "2.0.0",
         );
@@ -93,7 +93,7 @@ class BugHeatPlugin extends MantisPlugin
 
         echo '</div>'
                 . '<div class="col-md-1 BugHeat--badge-column">'
-                    . '<span id="BugHeat--badge" data-container="body" data-toggle="popover" data-html="true" data-placement="left" data-title="BugHeat Calculation" data-content="' . $this->getBugHeatDescription($iBugID) . '" class="badge badge-' .
+                    . '<span id="BugHeat--badge" data-container="body" data-toggle="popover" data-html="true" data-placement="left" data-title="Bug Heat calculation" data-content="' . $this->getBugHeatDescription($iBugID) . '" class="badge badge-' .
                     (
                         $heatcount > 100
                         ? 'danger'
@@ -241,11 +241,11 @@ class BugHeatPlugin extends MantisPlugin
         Subscribers         Adds 2 points per subscriber  (incl. subscribers to duplicates)
         */
         return array(
-            'monitor_heat'        => 2 ,
             'private_heat'        => 150,
             'security_issue_heat' => 250,
-            'affected_user_heat'  => 4,
             'duplicate_heat'      => 6,
+            'affected_user_heat'  => 4,
+            'monitor_heat'        => 2,
             'subscriber_heat'     => 2
         );
     }
@@ -347,7 +347,13 @@ class BugHeatPlugin extends MantisPlugin
     {
 
         $calcArray = $this->getBugHeatcalculation($iBugID);
-        return "<ul class=list-group>"
+        $sumAffectedUsers=$calcArray['iCountAffectedUsers'] * $calcArray['iAffectedMultiplier'];
+        return "
+        <p>
+        To appraise a bug are we are giving you a calculated measure — called bug heat — of its likely significance. You can see bug heat in bug listings, and also on individual bug pages, as a number next to a flame icon.
+        Here's how the bug heat score is calculated:
+        </p>      
+        <ul class=list-group>"
             . ($calcArray['iCountAffectedUsers'] > 0
                 ? "<li class=list-group-item>"
                         . sprintf(
