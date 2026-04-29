@@ -69,18 +69,18 @@ class BugHeatPlugin extends MantisPlugin
 
             if ($iUserID == $oBug->reporter_id) {
                 // If the user is the reporter of this bug
-                printf('This bug affects you and %s other person(s).', count($aAffectedUsers));
+                printf('This issue affects you and %s other person(s).', count($aAffectedUsers));
             } else {
                     // If user already marked that he is affected
                     echo "<a href='#' id='BugHeat--action-link-affection'><span id='BugHeat--affectMessage' data-affected=\""
                     . (in_array($iUserID, $aAffectedUsers)
-                        ? "1\">" . sprintf('This bug affects you and %s other person(s).', count($aAffectedUsers))
-                        : "0\">" . sprintf('This bug affects %s person(s). Does this bug affect you?', count($aAffectedUsers) + 1)
+                        ? "1\">" . sprintf('This issue affects you and %s other person(s).', count($aAffectedUsers))
+                        : "0\">" . sprintf('This issue affects %s person(s). Does this issue affect you?', count($aAffectedUsers) + 1)
                     )
                     . "</span></a>";
             }
         } else {
-            printf('This bug affects %s person(s).', count($aAffectedUsers) + 1);
+            printf('This issue affects %s person(s).', count($aAffectedUsers) + 1);
         }
 
         $oCustomFields = custom_field_get_all_linked_fields($iBugID);
@@ -257,11 +257,11 @@ class BugHeatPlugin extends MantisPlugin
         $oBug = bug_get($iBugID, true);
         if ($iUserID == $oBug->reporter_id) {
             // If the user is the reporter of this bug
-            return sprintf('This bug affects you and %s other person(s).', count($aAffectedUsers));
+            return sprintf('This issue affects you and %s other person(s).', count($aAffectedUsers));
         } else {
             return ( in_array($iUserID, $aAffectedUsers)
-                ? sprintf('This bug affects you and %s other person(s).', count($aAffectedUsers))
-                : sprintf('This bug affects %s person(s). Does this bug affect you?', count($aAffectedUsers) + 1)
+                ? sprintf('This issue affects you and %s other person(s).', count($aAffectedUsers))
+                : sprintf('This issue affects %s person(s). Does this issue affect you?', count($aAffectedUsers) + 1)
             );
         }
     }
